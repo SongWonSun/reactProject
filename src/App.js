@@ -1,12 +1,11 @@
+import logo from './logo.svg';
 import './App.css';
-import axios from 'axios';
+import Search from '../src/components/Search';
 
 function App() {
   return (
-    <div>
-      test
-    </div>
-  );
+    <Search />
+  )
 }
 
 

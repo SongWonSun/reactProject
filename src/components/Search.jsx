@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import KakaoMap from './KakaoMap';
+import { Link, useParams,useLocation } from 'react-router-dom'
 
-
-function SearchFetch({receiveData}){
+function SearchFetch(){
     const [data, setData] = useState({ items: [] });
     const [query, setQuery] = useState("포항시");
 
@@ -17,11 +18,10 @@ function SearchFetch({receiveData}){
             `http://api.data.go.kr/openapi/tn_pubr_public_lbrry_api?serviceKey=efSREml9J5VV3VB7rUN3F1QrndFlWhJWdlTOrfPyf5al8SixYeyO%2FhQJIk9GdSCIHklk5t6iomUE6jj9uRTkZA%3D%3D&pageNo=1&numOfRows=100&type=json&SIGNGU_NM=${query}`
         );
         if (!completed){
-            console.log(result.data.response.body.items);
+            // console.log(result.data.response.body.items);
             setData(result.data.response.body || {items : []});
-            receiveData(result.data.response.body.items)
         }else{
-            console.log(completed);
+            // console.log(completed);
         }
         } catch(error){
           console.log(error);
@@ -39,11 +39,44 @@ function SearchFetch({receiveData}){
         <input value={query} onChange={(e) => setQuery(e.target.value)} />
         <ul>
           {data.items &&
-           data.items.map((value,index) => (
-            <a href={index}><li key={index}>{value.lbrryNm} : {value.closeDay}</li></a>
-           ))}
+            data.items.map((value, index) => (
+              <Link to={`/detail/${index}?name=${value.lbrryNm}&closeDay=${value.closeDay}&longitude=${value.longitude}&latitude=${value.latitude}`} key={index}>
+                <li>{value.lbrryNm} : {value.closeDay}</li>
+              </Link>
+            ))}
         </ul>
       </>
     );
 }
-export default SearchFetch;
+function Detail() {
+
+  /**
+   * id : 인덱스번호
+   * location : 현재URL가져오기
+   * searchParams : 쿼리스트링 값 가져오기
+   * name: 도서관이름
+   * closeDay : 휴관일
+   * @return 도서관이름,휴관일,경도,위도,카카오맵
+   */
+  const { id } = useParams();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const name = searchParams.get('name');
+  const closeDay = searchParams.get('closeDay');
+  const longitude = searchParams.get('longitude');
+  const latitude = searchParams.get('latitude');
+
+
+  return (
+    <>
+      도서관 내용
+      도서관 내용
+      <p>도서관 이름: {name}</p>
+      <p>휴관일: {closeDay}</p>
+      <p>경도 : {longitude}</p>
+      <p>위도 : {latitude}</p>
+      <KakaoMap index={id} longitude = {longitude} latitude= {latitude} />
+    </>
+  );
+}
+export { SearchFetch, Detail };

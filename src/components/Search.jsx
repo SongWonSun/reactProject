@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import KakaoMap from './KakaoMap';
-import { Link, useParams,useLocation } from 'react-router-dom'
+import { Link, useParams, useLocation } from 'react-router-dom'
 
 function SearchFetch(){
     const [data, setData] = useState({ items: [] });
@@ -48,6 +48,9 @@ function SearchFetch(){
       </>
     );
 }
+/**
+ * @see SearchFetch() //참조해서 봐야할것
+ */
 function Detail() {
 
   /**
@@ -56,7 +59,7 @@ function Detail() {
    * searchParams : 쿼리스트링 값 가져오기
    * name: 도서관이름
    * closeDay : 휴관일
-   * @return 도서관이름,휴관일,경도,위도,카카오맵
+   * @returns 도서관이름,휴관일,경도,위도,카카오맵
    */
   const { id } = useParams();
   const location = useLocation();
@@ -69,7 +72,6 @@ function Detail() {
 
   return (
     <>
-      도서관 내용
       도서관 내용
       <p>도서관 이름: {name}</p>
       <p>휴관일: {closeDay}</p>
